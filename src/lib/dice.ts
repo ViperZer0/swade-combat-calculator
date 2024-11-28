@@ -42,3 +42,4 @@ export class WildDie implements Rollable {
         return Math.max(wildDie.roll(), skillDie.roll());
     }
 }
+

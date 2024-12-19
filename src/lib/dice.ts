@@ -1,8 +1,10 @@
-export interface Rollable {
+export interface Rollable
+{
     roll(): number;
 }
 
-export class ExplodingDie implements Rollable {
+export class ExplodingDie implements Rollable
+{
     dieSize: number;
     random: () => number;
 
@@ -27,7 +29,8 @@ export class ExplodingDie implements Rollable {
     }
 }
 
-export class WildDie implements Rollable {
+export class WildDie implements Rollable
+{
     dieSize: number;
     random: () => number;
 

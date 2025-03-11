@@ -7,7 +7,7 @@
 
     let sampleSize = $state(100);
     let results: Array<[number, number]> | undefined = $state(undefined);
-    let total = $derived(results.reduce((acc, v) => acc + v[1], 0));
+    let total = $derived(results?.reduce((acc, v) => acc + v[1], 0));
 
     function generateResults() {
         results = sortDistribution(sampleDistribution(die, sampleSize));

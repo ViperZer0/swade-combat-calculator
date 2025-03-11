@@ -1,16 +1,24 @@
 <script lang="ts">
     import { WildDie } from "$lib/dice";
-	import { sampleDistribution, sortDistribution } from "$lib/sample";
+	import { sampleDistribution, SortedSampleDistribution, type Sample } from "$lib/sample";
+	import { Option } from "effect";
     
     let { dieSize = 4 } = $props();
     let die = $derived(new WildDie(dieSize));
 
     let sampleSize = $state(100);
-    let results: Array<[number, number]> | undefined = $state(undefined);
-    let total = $derived(results?.reduce((acc, v) => acc + v[1], 0));
+    let results: Option.Option<SortedSampleDistribution> = $state(Option.none());
+    let total: Option.Option<number> = $derived.by(() => {
+        // I know this looks scary (and it kinda is) but this basically 
+        // just returns None if results hasn't been defined,
+        // and if it HAS been defined it calculates the total
+        // Number of results. This should be the exact same as sampleSize
+        // but maybe we want to double check that???
+        return Option.map(results, (results) => results[Symbol.iterator]().reduce((acc: number, sample: Sample) => acc + sample.count, 0));
+    });
 
     function generateResults() {
-        results = sortDistribution(sampleDistribution(die, sampleSize));
+        results = Option.some(sampleDistribution(die, sampleSize).sort());
     }
 
 </script>
@@ -60,7 +68,7 @@
 </div>
 
 <div>
-{#if results !== undefined}
+{#if Option.isSome(results)}
     <table>
     <thead>
         <tr>
@@ -70,11 +78,13 @@
         </tr>
     </thead>
     <tbody>
-    {#each results as result}
+    {#each results.value as result: Sample}
         <tr>
-            <td>{result[0]}</td>
+            <td>{result.result}</td>
             <!--<td>{result[1]}</td>-->
-            <td>{((result[1]/total * 100).toFixed(2)).toString() + "%"}</td>
+            <!-- We can assert that total should not be None since results is not None.
+            I don't know if there's a better way to logically make these things equivalent? -->
+            <td>{((result.count/Option.getOrThrow(total) * 100).toFixed(2)).toString() + "%"}</td>
         </tr>
     {/each}
     </tbody>

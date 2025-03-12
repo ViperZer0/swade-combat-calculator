@@ -1,5 +1,12 @@
+/**
+ * Represents anything that can be rolled 
+ *
+ * @interface Rollable
+ */
 export interface Rollable
 {
+    /** This function can be called to "roll" the rollable and return a number.
+     * This should *probably* be an integer **/
     roll(): number;
 }
 
@@ -19,7 +26,7 @@ export class ExplodingDie implements Rollable
      * @param {number} dieSize - The size of the die. Can be any positive number.
      * @param {} [random] - Any function that returns an integer, defaults to {@link Math.random}
      */
-    public constructor(dieSize: number, random=Math.random) {
+    public constructor(dieSize: number, random:() => number = Math.random) {
         this.dieSize = dieSize;
         this.random = random;
     }
@@ -55,7 +62,7 @@ export class WildDie implements Rollable
      * @param {number} dieSize - The size of the die. Can be any positive number.
      * @param {} [random] - Any function that returns an integer, defaults to {@link Math.random}
      */
-    public constructor(dieSize: number, random=Math.random) {
+    public constructor(dieSize: number, random: () => number = Math.random) {
         this.dieSize = dieSize;
         this.random = random;
     }

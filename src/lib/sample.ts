@@ -17,6 +17,10 @@ export interface SampleDistribution extends Iterable<Sample>
 {
 }
 
+/* Represents an unsorted sample distribution which uses a hashmap internally.
+ * If you want the sample distribution to be sorted (by the results) use {@link SortedSampleDistribution}
+ * i.e for iteration or displaying
+ */
 export class HashmapSampleDistribution implements SampleDistribution {
     private results: Map<number, number>;
 
